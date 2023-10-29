@@ -22,7 +22,18 @@ class Particle {
         this.maxLength = Math.floor(Math.random() * 200 + 10); 
         this.angle = 0; 
         this.timer = this.maxLength * 2;  
-        this.colors = ['#4c026b', '#730d9e', '#6d1785', '#b118db', '#da6ff7'];
+        this.colors = ['#4c026b', '#730d9e', '#6d1785', '#b118db', '#da6ff7', '#490592', 
+        '#ee77cb',
+        '#af781d',
+        '#ef765b',
+        '#73a57f',
+        '#ccec33',
+        '#3fde0e',
+        '#94017d',
+        '#50599a',
+        '#674243',
+        '#c6a492',
+        '#8c2bb8'];
         this.color = this.colors [Math.floor(Math.random() * this.colors.length)];
     } 
     
