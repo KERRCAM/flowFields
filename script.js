@@ -21,7 +21,9 @@ class Particle {
         this.history = [{x: this.x, y: this.y}]; 
         this.maxLength = Math.floor(Math.random() * 200 + 10); 
         this.angle = 0; 
-        this.timer = this.maxLength * 2;
+        this.timer = this.maxLength * 2;  
+        this.colors = ['#4c026b', '#730d9e', '#6d1785', '#b118db', '#da6ff7'];
+        this.color = this.colors [Math.floor(Math.random() * this.colors.length)];
     } 
     
     draw(context){ 
@@ -29,7 +31,8 @@ class Particle {
         context.moveTo(this.history[0].x, this.history[0].y); 
         for (let i = 0; i < this.history.length; i++){ 
             context.lineTo(this.history[i].x, this.history[i].y); 
-        } 
+        }  
+        context.strokeStyle = this.color;
         context.stroke();
     } 
 
@@ -67,9 +70,10 @@ class Particle {
 } 
 
 class Effect { 
-    constructor(width, height){ 
-        this.width = width; 
-        this.height = height; 
+    constructor(canvas){  
+        this.canvas = canvas;
+        this.width = this.canvas.width; 
+        this.height = this.canvas.height; 
         this.particles = []; 
         this.numberOfParticles = 1000;  
         this.cellSize = 5; // can reduce to make smoother flow
@@ -77,8 +81,18 @@ class Effect {
         this.cols; 
         this.flowField = [];  
         this.curve = 1.0; 
-        this.zoom = 0.11;
-        this.init();
+        this.zoom = 0.01; 
+        this.debug = true;
+        this.init(); 
+
+        window.addEventListener('keydown', e => { 
+            if (e.key === 'd') this.debug = !this.debug;
+        }); 
+
+        window.addEventListener('resize', e =>{ 
+            //console.log(e.target.innerWidth, e.target.innerHeight); 
+            this.resize(e.target.innerWidth, e.target.innerHeight);
+        });
     } 
 
     init (){   
@@ -91,25 +105,52 @@ class Effect {
                 let angle = (Math.cos(x * this.zoom) + Math.sin(y * this.zoom)) * this.curve; 
                 this.flowField.push(angle);
             } 
-            console.log(this.flowField);
+            //console.log(this.flowField);
         }
 
         //makes the particles 
         for (let i = 0; i < this.numberOfParticles; i++){ 
             this.particles.push(new Particle(this));
         }
+    }  
+
+    drawGrid(context){  
+        context.save(); 
+        context.strokeStyle = 'white'; 
+        context.lineWidth = 0.3;
+        for (let c = 0; c < this.cols; c++){ 
+            context.beginPath(); 
+            context.moveTo(this.cellSize * c, 0); 
+            context.lineTo(this.cellSize * c, this.height); 
+            context.stroke;
+        } 
+        for (let r = 0; r < this.rows; r++){ 
+            context.beginPath(); 
+            context.moveTo(0, this.cellSize * r); 
+            context.lineTo(this.width, this.cellSize * r); 
+            context.stroke;
+        } 
+        context.restore();
     } 
 
-    render(context){ 
+    resize(width, height){ 
+        this.canvas.width = width; 
+        this.canvas.height = height;
+        this.width = this.canvas.width; 
+        this.height = this.canvas.height; 
+    }
+
+    render(context){  
+        this.drawGrid(context);
         this.particles.forEach(particle =>{ 
             particle.draw(context); 
             particle.update();
-        });
+        }); 
     }
 } 
 
-const effect = new Effect(canvas.width, canvas.height); 
-console.log(effect); 
+const effect = new Effect(canvas); 
+//console.log(effect); 
 
 function animate(){  
     ctx.clearRect(0, 0, canvas.width, canvas.height);
