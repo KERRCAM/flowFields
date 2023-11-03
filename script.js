@@ -23,16 +23,16 @@ class Particle {
         this.angle = 0; 
         this.timer = this.maxLength * 2;  
         this.colors = ['#4c026b', '#730d9e', '#6d1785', '#b118db', '#da6ff7', '#490592', 
-        '#ee77cb',
-        '#af781d',
-        '#ef765b',
-        '#73a57f',
-        '#ccec33',
-        '#3fde0e',
-        '#94017d',
-        '#50599a',
-        '#674243',
-        '#c6a492',
+        '#37387e',
+        '#286273',
+        '#282580',
+        '#02c9ab',
+        '#00ffe1',
+        '#8300ff',
+        '#5600ff',
+        '#0500f6',
+        '#0d00ff',
+        '#0266ff',
         '#8c2bb8'];
         this.color = this.colors [Math.floor(Math.random() * this.colors.length)];
     } 
@@ -86,13 +86,13 @@ class Effect {
         this.width = this.canvas.width; 
         this.height = this.canvas.height; 
         this.particles = []; 
-        this.numberOfParticles = 1000;  
+        this.numberOfParticles = 1500;
         this.cellSize = 5; // can reduce to make smoother flow
         this.rows; 
         this.cols; 
         this.flowField = [];  
-        this.curve = 1.0; 
-        this.zoom = 0.01; 
+        this.curve = 2.0;
+        this.zoom = 0.03;
         this.debug = true;
         this.init(); 
 
